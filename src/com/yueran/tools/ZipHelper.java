@@ -27,13 +27,13 @@ public class ZipHelper {
 				{
 					out = new ByteOutputStream();
 					int len = 0;
-	    			        while((len = zis.read(buffer))>0)
-	    			        {
-	    				    out.write(buffer, 0, len);
+			        while((len = zis.read(buffer))>0)
+			        {
+				    	out.write(buffer, 0, len);
 					}
-	    			        break;
+	    			break;
 				}
-    			        ze = zis.getNextEntry();
+    			ze = zis.getNextEntry();
 			}
 		}
 		catch(Exception e)
@@ -50,7 +50,7 @@ public class ZipHelper {
 				}
 				catch(Exception e)
 				{
-				    
+				    e.printStackTrace();
 				}
 			}
 		}
