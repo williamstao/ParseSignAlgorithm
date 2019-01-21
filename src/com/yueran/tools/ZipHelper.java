@@ -35,7 +35,6 @@ public class ZipHelper {
 				}
     			        ze = zis.getNextEntry();
 			}
-			zis.close();
 		}
 		catch(Exception e)
 		{
