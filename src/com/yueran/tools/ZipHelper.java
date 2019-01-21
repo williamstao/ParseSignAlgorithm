@@ -15,9 +15,9 @@ public class ZipHelper {
 	{
 		byte[] buffer = new byte[1024];
 		OutputStream out = null;
+		ZipInputStream zis = null;
 		try
 		{
-			ZipInputStream zis = null;
 			zis = new ZipInputStream(new FileInputStream(zipFile));
 			ZipEntry ze = zis.getNextEntry();
 			while(ze!=null)
@@ -27,19 +27,33 @@ public class ZipHelper {
 				{
 					out = new ByteOutputStream();
 					int len = 0;
-	    			while((len = zis.read(buffer))>0)
-	    			{
-	    				out.write(buffer, 0, len);
+	    			        while((len = zis.read(buffer))>0)
+	    			        {
+	    				    out.write(buffer, 0, len);
 					}
-	    			break;
+	    			        break;
 				}
-    			ze = zis.getNextEntry();
+    			        ze = zis.getNextEntry();
 			}
 			zis.close();
 		}
 		catch(Exception e)
 		{
 			out = null;
+		}
+		finally
+		{
+			if(zis!=null)
+			{
+				try
+				{
+				    zis.close();
+				}
+				catch(Exception e)
+				{
+				    
+				}
+			}
 		}
 		return out;
 	}
