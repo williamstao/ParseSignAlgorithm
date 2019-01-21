@@ -51,12 +51,25 @@ public class ZipHelper {
 		try
 		{
 			byte[] data = ((ByteOutputStream) out).toByteArray();
-			out.close();
 			in = new ByteArrayInputStream(data);
 		}
 		catch(Exception e)
 		{
 			in = null;
+		}
+		finally
+		{
+			if(out!=null)
+			{
+				try 
+				{
+					out.close();
+				}
+				catch (Exception e) 
+				{
+					e.printStackTrace();
+				}
+			}
 		}
 		
 		return in;
