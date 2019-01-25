@@ -1,8 +1,6 @@
 package com.yueran.tools;
 
-import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -11,13 +9,15 @@ import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
 
 public class ZipHelper {
 	
-	public static OutputStream unZipIt(String zipFile)
+	@SuppressWarnings("deprecation")
+	public static byte[] unZipIt(String zipFile)
 	{
 		byte[] buffer = new byte[1024];
 		OutputStream out = null;
-		ZipInputStream zis = null;
+		byte[] data = null;
 		try
 		{
+			ZipInputStream zis = null;
 			zis = new ZipInputStream(new FileInputStream(zipFile));
 			ZipEntry ze = zis.getNextEntry();
 			while(ze!=null)
@@ -27,70 +27,40 @@ public class ZipHelper {
 				{
 					out = new ByteOutputStream();
 					int len = 0;
-			        while((len = zis.read(buffer))>0)
-			        {
-				    	out.write(buffer, 0, len);
+	    			while((len = zis.read(buffer))>0)
+	    			{
+	    				out.write(buffer, 0, len);
 					}
 	    			break;
 				}
     			ze = zis.getNextEntry();
 			}
+			zis.close();
+			data = ((ByteOutputStream) out).toByteArray();
 		}
 		catch(Exception e)
 		{
-			out = null;
+			data = null;
 		}
 		finally
 		{
-			if(zis!=null)
+			if(out != null)
 			{
 				try
 				{
-				    zis.close();
-				}
-				catch(Exception e)
-				{
-				    e.printStackTrace();
-				}
-			}
-		}
-		return out;
-	}
-	
-	@SuppressWarnings("deprecation")
-	public static InputStream parse(OutputStream out)
-	{
-		InputStream in = null;
-		try
-		{
-			byte[] data = ((ByteOutputStream) out).toByteArray();
-			in = new ByteArrayInputStream(data);
-		}
-		catch(Exception e)
-		{
-			in = null;
-		}
-		finally
-		{
-			if(out!=null)
-			{
-				try 
-				{
 					out.close();
 				}
-				catch (Exception e) 
+				catch(Exception e)
 				{
 					e.printStackTrace();
 				}
 			}
 		}
-		
-		return in;
+		return data;
 	}
 	
-	public static InputStream parseAlgName(String zipFile)
+	public static byte[] parseAlgName(String zipFile)
 	{
-		OutputStream out = unZipIt(zipFile);
-		return parse(out);
+		return unZipIt(zipFile);
 	}
 }

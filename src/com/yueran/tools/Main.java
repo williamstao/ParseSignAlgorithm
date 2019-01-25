@@ -1,6 +1,5 @@
 package com.yueran.tools;
 
-import java.io.InputStream;
 
 public class Main {
 	static final String version = "1.0.4(2016/12/12)";
@@ -12,7 +11,6 @@ public class Main {
 		
 		String cmd = args[0];
 		boolean success = false;
-		InputStream is = null;
 		/**
 		 * --algname CERT.RSA
 		 */ 
@@ -33,14 +31,14 @@ public class Main {
 					System.exit(-1);
 				}
 				
-				is= ZipHelper.parseAlgName(zip);
-				if(is == null)
+				byte[] data = ZipHelper.parseAlgName(zip);
+				if(data == null)
 				{
 					System.out.println("Error:Get FileStream fail");
 					System.exit(-1);
 				}
 				
-				String algname = SignTools.parseAlgName(is);
+				String algname = SignTools.parseAlgName(data);
 				if (algname != null)
 				{
 					success = true;
@@ -66,20 +64,6 @@ public class Main {
 		{
 			e.printStackTrace();
 			System.exit(-1);
-		}
-		finally
-		{
-			if(is != null)
-			{
-				try 
-				{
-					is.close();
-				}
-				catch(Exception e) 
-				{
-					e.printStackTrace();
-				}
-			}
 		}
 	}
 }
